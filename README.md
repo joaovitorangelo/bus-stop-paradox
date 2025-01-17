@@ -1,1 +1,1 @@
-# paradoxo-da-parada-de-onibus
+# Bus Stop Paradox
