@@ -2,12 +2,12 @@ let $ = jQuery;
 $(document).ready(function() {
   let user_name = sessionStorage.getItem('user_name') || '';
   play();
-  questions();
+  // questions();
 
   function play() {
     $('.text').hide();
     $('main').append('<h1 class="title">' + user_name + '</h1>');
-    $('main').append('<form id="play"><label for="name">Seu nome:</label><input id="name" name="name" type="text"><button type="submit">Enviar</button></form>');
+    $('main').append('<form id="play"><label for="name">Seu nome:</label><input id="name" name="name" type="text"><button id="btn-start" type="submit">Enviar</button></form>');
   
     $('#play').on('submit', function(event) {
       event.preventDefault();
@@ -261,7 +261,7 @@ function typeText(text, speed, callback) {
 
   typeLetter(); // Inicia o efeito de digitação
 }
-function questions() {
-  $('main').append('<div id="questions"><button>Verdade</button><button>As vezes esse horario até que passa</button></div>');
+// function questions() {
+//   $('main').append('<div id="questions"><button>Verdade</button><button>As vezes esse horario até que passa</button></div>');
 
-}
+// }

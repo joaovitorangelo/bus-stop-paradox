@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paradoxo do maconheiro</title>
+  <title>Bus Stop Paradox</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Play:wght@400;700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -19,7 +19,65 @@
     <div class="window">
       <img class="frames" src="" alt="">
       <h1 class="text"></h1>
+      <button id="teste">Teste</button>
     </div>
   </main>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+      import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+      // Configuração do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyD60xUNCYOLYvqI-XFeZ1l2Y8douEeaxj8",
+        authDomain: "busstopparadox-c7f5e.firebaseapp.com",
+        projectId: "busstopparadox-c7f5e",
+        storageBucket: "busstopparadox-c7f5e.firebasestorage.app",
+        messagingSenderId: "581948864678",
+        appId: "1:581948864678:web:131f3395285498c717dc67",
+        measurementId: "G-2DTFJNZZ7F"
+      };
+
+      // Inicializando o Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app); // Agora Firestore é inicializado corretamente
+
+      // Acesso ao Firestore
+      const incrementButton = document.getElementById("teste");
+      const contadorRef = doc(db, "contadores", "contadorId");
+
+      // Função para gerar um ID único para cada clique
+      function generateClickId() {
+        return "click-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+      }
+      
+      // Função para incrementar o contador
+      incrementButton.addEventListener("click", async () => {
+        const clickId = generateClickId();  // Gera um ID único para o clique
+        console.log("ID único do clique: ", clickId);
+
+        try {
+          // Obter o valor atual
+          const docSnap = await getDoc(contadorRef);
+          if (docSnap.exists()) {
+            // Incrementa o valor do contador
+            const currentCount = docSnap.data().contador || 0;
+            await updateDoc(contadorRef, {
+              contador: currentCount + 1,
+              clicks: docSnap.data().clicks ? [...docSnap.data().clicks, clickId] : [clickId]  // Adiciona o ID do clique ao array
+            });
+            console.log("Contador incrementado com sucesso!");
+          } else {
+            // Se o documento não existir, cria com valor inicial
+            await setDoc(contadorRef, {
+              contador: 1,
+              clicks: [clickId]  // Cria o primeiro clique com ID único
+            });
+            console.log("Documento criado e contador iniciado!");
+          }
+        } catch (error) {
+          console.error("Erro ao atualizar o contador: ", error);
+        }
+      });
+  </script>
 </body>
 </html>
